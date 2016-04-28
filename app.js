@@ -71,9 +71,18 @@ var UserInput = React.createClass({
 var Calendar = React.createClass({
 
   render: function() {
-    var months = this.seedCalendar(this.props.startDate, this.props.numDays, this.props.countryCode);
+    var months = this.seedMonths(this.props.startDate, this.props.numDays, this.props.countryCode);
     return (
       <div className="calendar">
+        <div className="days">
+          <div className="cell">S</div>
+          <div className="cell">M</div>
+          <div className="cell">T</div>
+          <div className="cell">W</div>
+          <div className="cell">T</div>
+          <div className="cell">F</div>
+          <div className="cell">S</div>
+        </div>
         {months.map(function(month, i) {
           return <CalendarMonth month={month} key={i} />
         })}
@@ -82,10 +91,11 @@ var Calendar = React.createClass({
   },
 
   //Here we will do most of our logic
-  seedCalendar: function (startDate, numDays, countryCode) {
+  seedMonths: function (startDate, numDays, countryCode) {
     var startMoment = moment(new Date(startDate)); //Transform string into moment object
     var endMoment = moment(startMoment).add(numDays - 1, 'days'); //Subtract 1 because we need a number not a range.
-    var numMonths = Math.ceil(endMoment.diff(startMoment, 'months', true)) + 1; //Add 1 because we need a range
+    //Figure out number of months in range
+    var numMonths = (endMoment.month() + endMoment.year() * 12) - (startMoment.month() + startMoment.year() * 12) + 1;
 
     //Get start and end for each month in between the start and end period
     var months = [];
@@ -116,11 +126,45 @@ var Calendar = React.createClass({
 var CalendarMonth = React.createClass({
 
   render: function() {
+    var month = this.props.month;
+    var weeks = this.seedWeeks(month.startMoment, month.endMoment);
     return (
       <div className="month">
         <div className="month-name">{this.props.month.startMoment.format('MMMM YYYY')}</div>
+        {weeks.map(function(week, i) {
+          return <CalendarRow week={week} key={i} />
+        })}
       </div>
     );
+  },
+
+  seedWeeks: function (startMoment, endMoment) {
+    //Diff between start of week of start range and end of week of end range to give us number of weeks to display
+    var numWeeks = Math.ceil(moment(endMoment).endOf('week').diff(moment(startMoment).startOf('week'), 'weeks', true));
+
+    //Get start and end for each week in between the start and end period
+    var weeks = [];
+    for (var i = 0; i < numWeeks; i++) {
+      var week = {};
+      var weekMoment = moment(startMoment).startOf('week').add(i, 'weeks'); //Get the next week
+
+      //We check if the week and year are the same as the start or end date,
+      //if so we set that week to have the same start or end date, respectively
+      if (startMoment.isSame(weekMoment, 'year') && startMoment.isSame(weekMoment, 'month') && startMoment.isSame(weekMoment, 'week')) {
+        week.startMoment = startMoment;
+      } else {
+        week.startMoment = moment(weekMoment).startOf('week');
+      }
+
+      if (endMoment.isSame(weekMoment, 'year') && endMoment.isSame(weekMoment, 'month') && endMoment.isSame(weekMoment, 'week')) {
+        week.endMoment = endMoment;
+      } else {
+        week.endMoment = moment(weekMoment).endOf('week');
+      }
+
+      weeks.push(week);
+    }
+    return weeks;
   }
 });
 

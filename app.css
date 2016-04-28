@@ -15,22 +15,34 @@
 
 .calendar {
     margin-left: 48px;
-    width: 500px;
-    padding: 0 24px;
+    width: 420px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
+}
 
+.calendar .days {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 6px;
+}
 
+.calendar .days .cell {
+    text-align: center;
 }
 
 .calendar .month {
-    margin: 24px 0;
+    margin-bottom: 24px;
     width: 100%;
 }
 
 .month .month-name {
     background-color: lightgreen;
     text-align: center;
+}
+
+.cell {
+    width: 60px; /*  420/7 = 60    */
 }
