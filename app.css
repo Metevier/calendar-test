@@ -1,5 +1,8 @@
 .app {
     margin: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 .user-input {
@@ -8,4 +11,26 @@
 
 .user-input div {
     margin-bottom: 6px;
+}
+
+.calendar {
+    margin-left: 48px;
+    width: 500px;
+    padding: 0 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+}
+
+.calendar .month {
+    margin: 24px 0;
+    width: 100%;
+}
+
+.month .month-name {
+    background-color: lightgreen;
+    text-align: center;
 }

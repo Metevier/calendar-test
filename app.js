@@ -72,10 +72,11 @@ var Calendar = React.createClass({
 
   render: function() {
     var months = this.seedCalendar(this.props.startDate, this.props.numDays, this.props.countryCode);
-    console.log(months);
     return (
-      <div>
-
+      <div className="calendar">
+        {months.map(function(month, i) {
+          return <CalendarMonth month={month} key={i} />
+        })}
       </div>
     );
   },
@@ -85,7 +86,7 @@ var Calendar = React.createClass({
     var startMoment = moment(new Date(startDate)); //Transform string into moment object
     var endMoment = moment(startMoment).add(numDays - 1, 'days'); //Subtract 1 because we need a number not a range.
     var numMonths = Math.ceil(endMoment.diff(startMoment, 'months', true)) + 1; //Add 1 because we need a range
-    
+
     //Get start and end for each month in between the start and end period
     var months = [];
     for (var i = 0; i < numMonths; i++) {
@@ -116,7 +117,9 @@ var CalendarMonth = React.createClass({
 
   render: function() {
     return (
-      <div></div>
+      <div className="month">
+        <div className="month-name">{this.props.month.startMoment.format('MMMM YYYY')}</div>
+      </div>
     );
   }
 });
