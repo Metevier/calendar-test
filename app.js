@@ -141,7 +141,6 @@ var CalendarMonth = React.createClass({
   seedWeeks: function (startMoment, endMoment) {
     //Diff between start of week of start range and end of week of end range to give us number of weeks to display
     var numWeeks = Math.ceil(moment(endMoment).endOf('week').diff(moment(startMoment).startOf('week'), 'weeks', true));
-    console.log(endMoment);
     //Get start and end for each week in between the start and end period
     var weeks = [];
     for (var i = 0; i < numWeeks; i++) {
@@ -164,7 +163,6 @@ var CalendarMonth = React.createClass({
 
       weeks.push(week);
     }
-    console.log(weeks);
     return weeks;
   }
 });
