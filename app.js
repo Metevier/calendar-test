@@ -106,13 +106,13 @@ var Calendar = React.createClass({
       //We check if the month and year are the same as the start or end date,
       //if so we set that month to have the same start or end date, respectively
       if (startMoment.isSame(monthMoment, 'year') && startMoment.isSame(monthMoment, 'month')) {
-        month.startMoment = startMoment;
+        month.startMoment = moment(startMoment);
       } else {
         month.startMoment = moment(monthMoment).startOf('month');
       }
 
       if (endMoment.isSame(monthMoment, 'year') && endMoment.isSame(monthMoment, 'month')) {
-        month.endMoment = endMoment;
+        month.endMoment = moment(endMoment);
       } else {
         month.endMoment = moment(monthMoment).endOf('month');
       }
@@ -141,7 +141,7 @@ var CalendarMonth = React.createClass({
   seedWeeks: function (startMoment, endMoment) {
     //Diff between start of week of start range and end of week of end range to give us number of weeks to display
     var numWeeks = Math.ceil(moment(endMoment).endOf('week').diff(moment(startMoment).startOf('week'), 'weeks', true));
-
+    console.log(endMoment);
     //Get start and end for each week in between the start and end period
     var weeks = [];
     for (var i = 0; i < numWeeks; i++) {
@@ -150,20 +150,21 @@ var CalendarMonth = React.createClass({
 
       //We check if the week and year are the same as the start or end date,
       //if so we set that week to have the same start or end date, respectively
-      if (startMoment.isSame(weekMoment, 'year') && startMoment.isSame(weekMoment, 'month') && startMoment.isSame(weekMoment, 'week')) {
-        week.startMoment = startMoment;
+      if (startMoment.isAfter(moment(weekMoment))) {
+        week.startMoment = moment(startMoment);
       } else {
         week.startMoment = moment(weekMoment).startOf('week');
       }
 
-      if (endMoment.isSame(weekMoment, 'year') && endMoment.isSame(weekMoment, 'month') && endMoment.isSame(weekMoment, 'week')) {
-        week.endMoment = endMoment;
+      if (endMoment.isBefore(moment(weekMoment).endOf('week'))) {
+        week.endMoment = moment(endMoment);
       } else {
         week.endMoment = moment(weekMoment).endOf('week');
       }
 
       weeks.push(week);
     }
+    console.log(weeks);
     return weeks;
   }
 });
