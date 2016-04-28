@@ -1,3 +1,11 @@
 .app {
-    font-size: 24px;
+    margin: 12px;
+}
+
+.user-input {
+    width: 250px;
+}
+
+.user-input div {
+    margin-bottom: 6px;
 }
