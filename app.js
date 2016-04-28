@@ -74,7 +74,7 @@ var Calendar = React.createClass({
     var months = this.seedMonths(this.props.startDate, this.props.numDays, this.props.countryCode);
     return (
       <div className="calendar">
-        <div className="days">
+        <div className="day-name">
           <div className="cell">S</div>
           <div className="cell">M</div>
           <div className="cell">T</div>
@@ -171,17 +171,48 @@ var CalendarMonth = React.createClass({
 var CalendarRow = React.createClass({
 
   render: function() {
+    var week = this.props.week;
+    var days = this.seedDays(week.startMoment, week.endMoment);
     return (
-      <div></div>
+      <div className="week">
+        {days.map(function(day, i) {
+          return <CalendarCell day={day} key={i} />
+        })}
+      </div>
     );
+  },
+
+  seedDays: function (startMoment, endMoment) {
+    var days = [];
+    for (var i = 0; i < 7; i++) {
+      var day = {};
+      if (startMoment.day() <= i && i <= endMoment.day()){
+        day.dayOfMonth = moment(startMoment).day(i).date(); //gets day of month for day of week
+        if (i === 0 || i === 6) {
+          day.weekend = true;
+        }
+      }
+      days.push(day);
+    }
+    return(days);
   }
 });
 
 var CalendarCell = React.createClass({
 
   render: function() {
+    var day = this.props.day;
+    var className = 'day cell';
+    if (!day.dayOfMonth) {
+      className += ' invalid'
+    }
+    if (day.weekend) {
+      className += ' weekend'
+    }
     return (
-      <div></div>
+      <div className={className}>
+        {day.dayOfMonth}
+      </div>
     );
   }
 });
